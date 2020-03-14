@@ -1,7 +1,7 @@
 const patientForm = `
 <label>Name:</label><br>
-<input type="text" id="name><br>
-<input type="hidden" id="dogId"><br>
+<input type="text" id="name"><br>
+<input type="hidden" id="patientId">
 <label>Sex At Birth:</label><br>
 <input type="text" id="sex"><br>
 <label>Gender:</label><br>
@@ -27,7 +27,7 @@ class Patient {
         newPatientForm.innerHTML = `<form onsubmit="createPatient(); return false;">` + patientForm
     }
     patientHtml() {
-        return `<div class="card" data-patient-id="${this.id}">
+        return `<div class="card-patient" data-patient-id="${this.id}">
                 Name: ${this.name}<br>
                 Sex: ${this.sex}<br>
                 Gender: ${this.gender}<br>
@@ -35,7 +35,6 @@ class Patient {
                 Date of Birth: ${this.date_of_birth}<br><br>
                 </div><br><br>`
     }
-
 }
 
 function getPatients() {
@@ -53,10 +52,10 @@ function renderPatients(data) {
         let newPatient = new Patient(patient)
         patientRecord.innerHTML += newPatient.patientHtml()
         
-        const selectPatientHtml = document.querySelector(`.card[data-patient-id="${newPatient.id}"]`)
+        const selectPatientHtml = document.querySelector(`.card-patient[data-patient-id="${newPatient.id}"]`)
         patient.visits.forEach(visit => {
             const visitHtml =
-            `<div class="card" data-visit-id="${visit.id}">
+            `<div class="card-visit" data-visit-id="${visit.id}">
             Title: ${visit.title}<br>
             Date of Visit: ${visit.date_of_visit}<br>
             Doctor: ${visit.doctor}<br>
@@ -65,8 +64,34 @@ function renderPatients(data) {
 
             selectPatientHtml.innerHTML += visitHtml
         })
-        
-
-    
     })
+}
+
+function createPatient() {
+    const patient = {
+        name: document.getElementById('name').value,
+        sex: document.getElementById('sex').value,
+        gender: document.getElementById('gender').value,
+        age: document.getElementById('age').value,
+        date_of_birth: document.getElementById('date_of_birth').value
+    }
+    fetch("http://localhost:3000/patients", {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(patient)
+    })
+    .then(resp => resp.json())
+    .then(patient => {
+        clearPatientHtml()
+        getPatients()
+        Patient.newPatientForm()
+    })
+}
+
+function clearPatientHtml() {
+    let patientData = document.querySelector('div#patient-record')
+    patientData.innerHTML = ""
 }

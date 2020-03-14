@@ -6,23 +6,23 @@ class PatientsController < ApplicationController
 
     def show
         patient = Patient.find(params[:id])
-        render json: patient
+        render json: patient, include: [:visits]
     end
 
     def create
         patient = Patient.create(patient_params)
-        render json: patient
+        render json: patient, include: [:visits]
     end
 
     def update
         patient.update(patient_params)
-        render json: patient
+        render json: patient, include: [:visits]
     end
 
     def destroy
         patient = Patient.find(params[:id])
         patient.destroy
-        render json: patient
+        render json: patient, include: [:visits]
     end
 
     private
