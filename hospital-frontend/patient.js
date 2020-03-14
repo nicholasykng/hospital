@@ -32,7 +32,7 @@ class Patient {
                 Sex: ${this.sex}<br>
                 Gender: ${this.gender}<br>
                 Age: ${this.age}<br>
-                Date of Birth: ${this.date_of_birth}<br>
+                Date of Birth: ${this.date_of_birth}<br><br>
                 </div><br><br>`
     }
 
@@ -61,9 +61,9 @@ function renderPatients(data) {
             Date of Visit: ${visit.date_of_visit}<br>
             Doctor: ${visit.doctor}<br>
             Description: ${visit.description}<br>
-            </div><br><br>`
+            </div><br>`
 
-            selectPatientHtml.append(visitHtml)
+            selectPatientHtml.innerHTML += visitHtml
         })
         
 
