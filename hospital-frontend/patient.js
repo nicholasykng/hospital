@@ -26,6 +26,15 @@ class Patient {
         let newPatientForm = document.querySelector('div#record-form')
         newPatientForm.innerHTML = `<form onsubmit="createPatient(); return false;">` + patientForm
     }
+    patientHtml() {
+        return `<div class="card" data-patient-id="${this.id}">
+                Name: ${this.name}<br>
+                Sex: ${this.sex}<br>
+                Gender: ${this.gender}<br>
+                Age: ${this.age}<br>
+                Date of Birth: ${this.date_of_birth}<br>
+                </div><br><br>`
+    }
 }
 
 function getPatients() {
@@ -38,12 +47,10 @@ function getPatients() {
 
 function renderPatients(data) {
     let patientRecord = document.querySelector('div#patient-record')
-    data.forEach((patient) => {
-        const patientHTML = `<div class="card" data-id=${patient.id}> <p>${patient.name}</p><br>
-        <p>${patient.sex}</p><br>
-        <p>${patient.gender}</p><br>
-        <p>${patient.age}</p><br>
-        <p>${patient.date_of_birth}</p></div>`;
-        patientRecord.append(patientHTML)
+    data.forEach((patient => {
+        let newPatient = new Patient(patient)
+        patientRecord.innerHTML += newPatient.patientHtml()
     })
+    )
+    
 }
