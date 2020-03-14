@@ -35,3 +35,15 @@ function getPatients() {
         renderPatients(data)
     })
 }
+
+function renderPatients(data) {
+    let patientRecord = document.querySelector('div#patient-record')
+    data.forEach((patient) => {
+        const patientHTML = `<div class="card" data-id=${patient.id}> <p>${patient.name}</p><br>
+        <p>${patient.sex}</p><br>
+        <p>${patient.gender}</p><br>
+        <p>${patient.age}</p><br>
+        <p>${patient.date_of_birth}</p></div>`;
+        patientRecord.append(patientHTML)
+    })
+}
