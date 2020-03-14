@@ -22,10 +22,12 @@ class Patient {
         this.age = data.age
         this.date_of_birth = data.date_of_birth
     }
+
     static newPatientForm() {
         let newPatientForm = document.querySelector('div#record-form')
         newPatientForm.innerHTML = `<form onsubmit="createPatient(); return false;">` + patientForm
     }
+
     patientHtml() {
         return `<div class="card-patient" data-patient-id="${this.id}">
                 Name: ${this.name}<br>
@@ -34,6 +36,11 @@ class Patient {
                 Age: ${this.age}<br>
                 Date of Birth: ${this.date_of_birth}<br><br>
                 </div><br><br>`
+    }
+
+    static editPatientForm() {
+        let editPatientFormHtml = document.querySelector('div#record-form')
+        editPatientFormHtml.innerHTML = `<form onsubmit="updatePatient(); return false;">` + patientForm
     }
 }
 
@@ -94,4 +101,12 @@ function createPatient() {
 function clearPatientHtml() {
     let patientData = document.querySelector('div#patient-record')
     patientData.innerHTML = ""
+}
+
+
+
+function addPatientListeners() {
+    document.querySelectorAll('.edit-patient-button').forEach(patient => {
+        patient.addEventListener("click", editPatient)
+    })
 }
