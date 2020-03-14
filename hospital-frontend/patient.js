@@ -11,7 +11,7 @@ const patientForm = `
 <label>Date Of Birth:</label><br>
 <input type="text" id="date_of_birth"><br>
 <input type="submit" value="Add New Patient">
-</form>`
+</form><br><br>`
 
 class Patient {
     constructor(data) {
@@ -35,6 +35,7 @@ class Patient {
                 Date of Birth: ${this.date_of_birth}<br>
                 </div><br><br>`
     }
+
 }
 
 function getPatients() {
@@ -47,10 +48,25 @@ function getPatients() {
 
 function renderPatients(data) {
     let patientRecord = document.querySelector('div#patient-record')
-    data.forEach((patient => {
+    data.forEach((patient) => {
+
         let newPatient = new Patient(patient)
         patientRecord.innerHTML += newPatient.patientHtml()
-    })
-    )
+        
+        const selectPatientHtml = document.querySelector(`.card[data-patient-id="${newPatient.id}"]`)
+        patient.visits.forEach(visit => {
+            const visitHtml =
+            `<div class="card" data-visit-id="${visit.id}">
+            Title: ${visit.title}<br>
+            Date of Visit: ${visit.date_of_visit}<br>
+            Doctor: ${visit.doctor}<br>
+            Description: ${visit.description}<br>
+            </div><br><br>`
+
+            selectPatientHtml.append(visitHtml)
+        })
+        
+
     
+    })
 }
