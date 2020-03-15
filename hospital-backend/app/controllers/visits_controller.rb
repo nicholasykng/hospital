@@ -1,29 +1,30 @@
 class VisitsController < ApplicationController
     def index
         visits = Visit.all 
-        render json: visits
+        render json: visits, except: [:created_at, :updated_at]
     end
 
     def show
         visit = Visit.find(params[:id])
-        render json: visit
+        render json: visit, except: [:created_at, :updated_at]
     end
 
     def create
         visit = Visit.create(visit_params)
-        render json: visit
+        render json: visit, except: [:created_at, :updated_at]
     end
 
     def update
+        visit = Visit.find_by(id: params[:id])
         visit.update(visit_params)
-        render json :visit
+        render json :visit, except: [:created_at, :updated_at]
         
     end
 
     def destroy
-        visit = visit.find(params[:id])
+        visit = visit.find_by(id :params[:id])
         visit.destroy
-        render json :visit
+        render json :visit, except: [:created_at, :updated_at]
     end
 
     private

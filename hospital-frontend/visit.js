@@ -30,3 +30,27 @@ function renderVisitFormField(patientId) {
             <input type="submit" value="Add Visit">`
 }
 
+function addVisit() {
+    const visit = {
+        title: document.getElementById('title').value,
+        date_of_visit: document.getElementById('date_of_visit').value,
+        doctor: document.getElementById('doctor').value,
+        description: document.getElementById('description').value,
+        patient_id: document.getElementById('visit-patientId').value
+    }
+    fetch('http://localhost:3000/visits', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(visit)
+    })
+    .then(resp => resp.json())
+    .then(visit => {
+        clearPatientHtml()
+        getPatients()
+        Patient.newPatientForm()
+    })
+}
+
