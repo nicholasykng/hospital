@@ -1,28 +1,32 @@
 class PatientsController < ApplicationController
     def index
         patients = Patient.all 
-        render json: patients, include: [:visits]
+        render json: patients, include: [:visits], except: [:created_at, :updated_at]
     end
 
     def show
         patient = Patient.find(params[:id])
-        render json: patient, include: [:visits]
+        render json: patient, include: [:visits], except: [:created_at, :updated_at]
     end
 
     def create
         patient = Patient.create(patient_params)
-        render json: patient, include: [:visits]
+        render json: patient, include: [:visits], except: [:created_at, :updated_at]
     end
 
     def update
         patient.update(patient_params)
-        render json: patient, include: [:visits]
+        if patient.save
+            render json: patient, include: [:visits], except: [:created_at, :updated_at], status: 200
+        else
+            render json: {errors: patient.errors.full_messages}, status: :unprocessible_entity
+        end
     end
 
     def destroy
-        patient = Patient.find(params[:id])
+        patient = Patient.find_by(id: params[:id])
         patient.destroy
-        render json: patient, include: [:visits]
+        render json: patient, include: [:visits], except: [:created_at, :updated_at]
     end
 
     private

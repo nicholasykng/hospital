@@ -9,9 +9,7 @@ const patientForm = `
 <label>Age:</label><br>
 <input type="integer" id="age"><br>
 <label>Date Of Birth:</label><br>
-<input type="text" id="date_of_birth"><br>
-<input type="submit" value="Add New Patient">
-</form><br><br>`
+<input type="text" id="date_of_birth"><br><br>`
 
 class Patient {
     constructor(data) {
@@ -25,11 +23,13 @@ class Patient {
 
     static newPatientForm() {
         let newPatientForm = document.querySelector('div#record-form')
-        newPatientForm.innerHTML = `<form onsubmit="createPatient(); return false;">` + patientForm
+        newPatientForm.innerHTML = `<form onsubmit="createPatient(); return false;">` + patientForm + `<input type="submit" value="Add New Patient"></form><br>`
     }
 
     patientHtml() {
         return `<div class="card-patient" data-patient-id="${this.id}">
+                <button class="edit-patient">Edit Patient</button>
+                <button class="delete-patient">Delete Patient</button><br>
                 Name: ${this.name}<br>
                 Sex: ${this.sex}<br>
                 Gender: ${this.gender}<br>
@@ -40,7 +40,7 @@ class Patient {
 
     static editPatientForm() {
         let editPatientFormHtml = document.querySelector('div#record-form')
-        editPatientFormHtml.innerHTML = `<form onsubmit="updatePatient(); return false;">` + patientForm
+        editPatientFormHtml.innerHTML = `<form onsubmit="updatePatient(); return false;">` + patientForm + `<input type="submit" value="Update Patient"></form><br>`
     }
 }
 
@@ -49,6 +49,7 @@ function getPatients() {
     .then(response => response.json())
     .then(data => {
         renderPatients(data)
+        addPatientListeners()
     })
 }
 
@@ -106,7 +107,63 @@ function clearPatientHtml() {
 
 
 function addPatientListeners() {
-    document.querySelectorAll('.edit-patient-button').forEach(patient => {
-        patient.addEventListener("click", editPatient)
+    document.querySelectorAll('button.edit-patient').forEach(element => {
+        element.addEventListener('click', editPatient)
+    })
+    document.querySelectorAll('button.delete-patient').forEach(element => {
+        element.addEventListener('click', deletePatient)
+    })
+}
+
+function updatePatient() {
+    let patientId = this.event.target.patientId.value
+    const patient = {
+        name: document.getElementById('name').value,
+        sex: document.getElementById('sex').value,
+        gender: document.getElementById('gender').value,
+        age: document.getElementById('age').value,
+        date_of_birth: document.getElementById('date_of_birth').value
+    }
+    fetch(`http://localhost:3000/patients/${patientId}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(patient)
+    })
+    .then(resp => resp.json())
+    .then(patient => {
+        clearPatientHtml()
+        getPatients()
+        Patient.newPatientForm()
+    })
+}
+
+function editPatient() {
+    let patientId = this.parentElement.getAttribute('data-patient-id')
+    fetch(`http://localhost:3000/patients/${patientId}`)
+    .then(resp => resp.json())
+    .then(data => {
+        Patient.editPatientForm()
+        let patientForm = document.querySelector('div#record-form')
+        patientForm.querySelector('#name').value = data.name
+        patientForm.querySelector('#patientId').value = data.id
+        patientForm.querySelector('#sex').value = data.sex
+        patientForm.querySelector('#gender').value = data.gender
+        patientForm.querySelector('#age').value = data.age
+        patientForm.querySelector('#date_of_birth').value = data.date_of_birth
+    })
+}
+
+function deletePatient() {
+    let patientId = this.parentElement.getAttribute('data-patient-id')
+    fetch(`http://localhost:3000/patients/${patientId}`, {
+        method: "DELETE"
+    })
+    .then(resp => resp.json())
+    .then(json => {
+        let selectPatient = document.querySelector(`.card[data-patient-id="${patientId}"]`)
+        selectPatient.remove()
     })
 }
