@@ -37,3 +37,17 @@ div.card-visit {
     cursor: pointer;
     border-radius: 12px;
   }
+  body {
+    height: 100%;
+    background-image: url('https://cdn.shopify.com/s/files/1/2804/8054/products/il_fullxfull.907683384_gwkt_1024x.jpg?v=1571726605');
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-family: sans-serif;
+    margin-top: 80px;
+    padding: 30px;
+}
+
+div#record-form, div.card-patient {
+  border-bottom-style:solid;
+  border-bottom:2px solid black;
+}

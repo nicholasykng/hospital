@@ -35,8 +35,9 @@ class Patient {
                 Gender: ${this.gender}<br>
                 Age: ${this.age}<br>
                 Date of Birth: ${this.date_of_birth}<br><br>
-                </div><br><br>
-                <button class="add-visit" id="${this.id}">Add Visit</button><br><br>`
+                <button class="add-visit" id="${this.id}">Add Visit</button><br><br>
+                </div><br>
+                `
     }
 
     static editPatientForm() {
