@@ -56,11 +56,25 @@ function addVisit() {
 }
 
 function addVisitsListeners() {
+    document.querySelectorAll('.delete-visit-button').forEach(element => {
+        element.addEventListener('click', deleteVisit)
+    })
     document.querySelectorAll('.edit-visit-button').forEach(element => {
         element.addEventListener('click', editVisit)
     })
-    document.querySelectorAll('.delete-visit-button').forEach(element => {
-        element.addEventListener('click', deleteVisit)
+}
+
+
+function deleteVisit() {
+    let visitId = this.parentElement.getAttribute('data-visit-id')
+    fetch(`http://localhost:3000/visits/${visitId}`, {
+        method: "DELETE"
+    })
+    .then(resp => resp.json())
+    .then(json => {
+        clearPatientHtml()
+        getPatients()
+        Patient.newPatientForm()
     })
 }
 
@@ -86,19 +100,6 @@ function completeVisitForm(data) {
 function renderNewVisitForm(patientId) {
     let visitForm = document.createElement('form')
     visitForm.setAttribute("onsubmit", "updateVisit(); return false;")
-    visitForm.innerHTML = completeVisitForm(patientId)
+    visitForm.innerHTML = renderVisitFormField(patientId)
     return visitForm
-}
-
-function deleteVisit() {
-    let visitId = this.parentElement.getAttribute('data-visit-id')
-    fetch(`http://localhost:3000/visits/${visitId}`, {
-        method: "DELETE"
-    })
-    .then(resp => resp.json())
-    .then(json => {
-        clearPatientHtml()
-        getPatients()
-        Patient.newPatientForm()
-    })
 }
