@@ -163,7 +163,8 @@ function deletePatient() {
     })
     .then(resp => resp.json())
     .then(json => {
-        let selectPatient = document.querySelector(`.card[data-patient-id="${patientId}"]`)
-        selectPatient.remove()
+        clearPatientHtml()
+        getPatients()
+        Patient.newPatientForm()
     })
 }

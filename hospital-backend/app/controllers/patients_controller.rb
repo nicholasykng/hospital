@@ -15,12 +15,9 @@ class PatientsController < ApplicationController
     end
 
     def update
+        patient = Patient.find_by(id: params[:id])
         patient.update(patient_params)
-        if patient.save
-            render json: patient, include: [:visits], except: [:created_at, :updated_at], status: 200
-        else
-            render json: {errors: patient.errors.full_messages}, status: :unprocessible_entity
-        end
+        render json: patient, include: [:visits], except: [:created_at, :updated_at]
     end
 
     def destroy
