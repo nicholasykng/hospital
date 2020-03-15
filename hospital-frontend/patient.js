@@ -35,7 +35,8 @@ class Patient {
                 Gender: ${this.gender}<br>
                 Age: ${this.age}<br>
                 Date of Birth: ${this.date_of_birth}<br><br>
-                </div><br><br>`
+                </div><br><br>
+                <button class="add-visit">Add Visit</button><br><br>`
     }
 
     static editPatientForm() {
@@ -113,6 +114,9 @@ function addPatientListeners() {
     document.querySelectorAll('button.delete-patient').forEach(element => {
         element.addEventListener('click', deletePatient)
     })
+    document.querySelectorAll('button.add-visit').forEach(element => {
+        element.addEventListener('click', renderNewVisitForm)
+    })
 }
 
 function updatePatient() {
@@ -168,3 +172,4 @@ function deletePatient() {
         Patient.newPatientForm()
     })
 }
+

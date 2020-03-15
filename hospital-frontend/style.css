@@ -24,7 +24,7 @@ div.card-visit {
     cursor: pointer;
   }
 
-  button.edit-patient, button.delete-patient {
+  button.edit-patient, button.delete-patient, button.add-visit {
     background-color: #4CAF50; /* Green */
     border: none;
     color: white;
