@@ -5,6 +5,7 @@ class Visit {
         this.date_of_visit = data.date_of_visit
         this.doctor = data.doctor
         this.description = data.description
+        this.patient_id = data.patient_id
     }
 }
 
@@ -54,3 +55,50 @@ function addVisit() {
     })
 }
 
+function addVisitsListeners() {
+    document.querySelectorAll('.edit-visit-button').forEach(element => {
+        element.addEventListener('click', editVisit)
+    })
+    document.querySelectorAll('.delete-visit-button').forEach(element => {
+        element.addEventListener('click', deleteVisit)
+    })
+}
+
+function editVisit() {
+    let visitId = this.parentElement.getAttribute('data-visit-id')
+    fetch(`http://localhost:3000/visits/${visitId}`)
+    .then(resp => resp.json())
+    .then(data => {
+        completeVisitForm(data)
+    })
+}
+function completeVisitForm(data) {
+    let visit = new Visit(data)
+    let visitForm = renderNewVisitForm(visit.patient_id)
+    visitForm.querySelector('#title').value = visit.title
+    visitForm.querySelector('#date_of_visit').value = visit.date_of_visit
+    visitForm.querySelector('#doctor').value = visit.doctor
+    visitForm.querySelector('#description').value = visit.description
+    visitForm.querySelector('#visit-patientId').value = visit.patient_id
+    document.querySelector(`.card-visit[data-visit-id="${visit.id}"]`).appendChild(visitForm)
+}
+
+function renderNewVisitForm(patientId) {
+    let visitForm = document.createElement('form')
+    visitForm.setAttribute("onsubmit", "updateVisit(); return false;")
+    visitForm.innerHTML = completeVisitForm(patientId)
+    return visitForm
+}
+
+function deleteVisit() {
+    let visitId = this.parentElement.getAttribute('data-visit-id')
+    fetch(`http://localhost:3000/visits/${visitId}`, {
+        method: "DELETE"
+    })
+    .then(resp => resp.json())
+    .then(json => {
+        clearPatientHtml()
+        getPatients()
+        Patient.newPatientForm()
+    })
+}

@@ -22,7 +22,7 @@ class VisitsController < ApplicationController
     end
 
     def destroy
-        visit = visit.find_by(id :params[:id])
+        visit = Visit.find_by(id: params[:id])
         visit.destroy
         render json :visit, except: [:created_at, :updated_at]
     end

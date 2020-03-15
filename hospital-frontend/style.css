@@ -24,8 +24,8 @@ div.card-visit {
     cursor: pointer;
   }
 
-  button.edit-patient, button.delete-patient, button.add-visit {
-    background-color: #4CAF50; /* Green */
+  button.edit-patient, button.delete-patient, button.add-visit, button.edit-visit-button, button.delete-visit-button {
+    background-color: #4CAF50; 
     border: none;
     color: white;
     padding: 20px;
@@ -48,6 +48,5 @@ div.card-visit {
 }
 
 div#record-form, div.card-patient {
-  border-bottom-style:solid;
   border-bottom:2px solid black;
 }

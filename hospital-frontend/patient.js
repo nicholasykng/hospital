@@ -52,6 +52,7 @@ function getPatients() {
     .then(data => {
         renderPatients(data)
         addPatientListeners()
+        addVisitsListeners()
     })
 }
 
@@ -70,6 +71,8 @@ function renderPatients(data) {
             Date of Visit: ${visit.date_of_visit}<br>
             Doctor: ${visit.doctor}<br>
             Description: ${visit.description}<br>
+            <button class="edit-visit-button">Edit Visit</button>
+            <button class="delete-visit-button">Delete Visit</button>
             </div><br>`
 
             selectPatientHtml.innerHTML += visitHtml
