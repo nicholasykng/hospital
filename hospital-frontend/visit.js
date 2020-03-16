@@ -28,7 +28,7 @@ function renderVisitFormField(patientId) {
             <input type="text" id="doctor"><br>
             <label>Description:</label><br>
             <input type="textarea" id="description"><br>
-            <input type="submit" value="Add Visit">`
+            <input type="submit" value="Submit">`
 }
 
 function addVisit() {
@@ -88,7 +88,7 @@ function editVisit() {
 }
 function completeVisitForm(data) {
     let visit = new Visit(data)
-    let visitForm = renderNewVisitForm(visit.patient_id)
+    let visitForm = renderVisitForm(visit.patient_id)
     visitForm.querySelector('#title').value = visit.title
     visitForm.querySelector('#date_of_visit').value = visit.date_of_visit
     visitForm.querySelector('#doctor').value = visit.doctor
@@ -97,9 +97,35 @@ function completeVisitForm(data) {
     document.querySelector(`.card-visit[data-visit-id="${visit.id}"]`).appendChild(visitForm)
 }
 
-function renderNewVisitForm(patientId) {
+function renderVisitForm(patientId) {
     let visitForm = document.createElement('form')
     visitForm.setAttribute("onsubmit", "updateVisit(); return false;")
     visitForm.innerHTML = renderVisitFormField(patientId)
     return visitForm
+}
+
+function updateVisit() {
+    let visitId = this.event.target.parentElement.getAttribute('data-visit-id')
+    let visitForm = document.querySelector(`.card-visit[data-visit-id="${visitId}"]`)
+    let visit = {
+        title: visitForm.querySelector('#title').value,
+        date_of_visit: visitForm.querySelector('#date_of_visit').value,
+        doctor: visitForm.querySelector('#doctor').value,
+        description: visitForm.querySelector('#description').value,
+        patient_id: visitForm.querySelector('#visit-patientId').value
+    }
+    fetch(`http://localhost:3000/visits/${visitId}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json", 
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(visit)
+    })
+    .then(resp => resp.json())
+    .then(data => {
+        clearPatientHtml()
+        getPatients()
+        Patient.newPatientForm()
+    })
 }

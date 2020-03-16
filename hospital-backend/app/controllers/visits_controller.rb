@@ -18,7 +18,6 @@ class VisitsController < ApplicationController
         visit = Visit.find_by(id: params[:id])
         visit.update(visit_params)
         render json: visit, except: [:created_at, :updated_at]
-        
     end
 
     def destroy
@@ -33,3 +32,4 @@ class VisitsController < ApplicationController
     end
 
 end
+
