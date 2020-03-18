@@ -80,6 +80,7 @@ function renderPatients(data) {
     })
 }
 
+//Creating New Patient through the forms
 function createPatient() {
     const patient = {
         name: document.getElementById('name').value,
