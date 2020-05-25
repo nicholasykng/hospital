@@ -9,7 +9,8 @@ const patientForm = `
 <label>Age:</label><br>
 <input type="integer" id="age"><br>
 <label>Date Of Birth:</label><br>
-<input type="text" id="date_of_birth"><br><br>`
+<input type="text" id="date_of_birth"><br><br>
+`
 
 class Patient {
     constructor(data) {
@@ -178,3 +179,40 @@ function deletePatient() {
     })
 }
 
+function sortPatient() {
+    let button = document.querySelector('button.sort_patient')
+    button.addEventListener('click', sortPatientsAlpha)
+}
+
+function sortPatientsAlpha() {
+    console.log("Testing")
+    fetch('http://localhost:3000/patients')
+    .then(resp => resp.json())
+    .then(json => {
+        json.sort(function(a, b) {
+
+            var nameA = a.name.toUpperCase(); // ignore upper and lowercase
+            var nameB = b.name.toUpperCase(); // ignore upper and lowercase
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+          
+            // names must be equal
+            return 0;
+
+          });
+          
+          clearPatientHtml()
+          let patientRecord = document.querySelector('div#patient-record')
+          
+          json.forEach((patient) => {
+
+            let newPatient = new Patient(patient)
+            patientRecord.innerHTML += newPatient.patientHtml()
+          }) 
+    })
+
+}
